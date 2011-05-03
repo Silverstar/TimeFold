@@ -2,6 +2,8 @@ package me.silverstar.timefold;
 
 import java.util.logging.Logger;
 
+import javax.swing.Timer;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -20,12 +22,17 @@ public class TimeFold extends JavaPlugin {
     //private final TimeFoldPlayerListener playerListener = new TimeFoldPlayerListener(this);
     //private final TimeFoldBlockListener blockListener = new TimeFoldBlockListener(this);
     //private final HashMap<Player, ArrayList<Block>> tfUsers = new HashMap<Player, ArrayList<Block>>();
-
+	private final TimeFoldActionListener TimeFoldAction = new TimeFoldActionListener(this);
+	
     public void onEnable() {
         //PluginManager pm = getServer().getPluginManager();
         //pm.registerEvent(Event.Type.BLOCK_BREAK, blockListener, Event.Priority.Normal, this);
         //pm.registerEvent(Event.Type.PLAYER_MOVE, playerListener, Event.Priority.Normal, this);
         
+    	Timer timer = new Timer(60000, TimeFoldAction);
+    	timer.setInitialDelay(60000);
+    	timer.start();
+    	
         PluginDescriptionFile pdfFile = this.getDescription();
         log.info( pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!" );
     }
