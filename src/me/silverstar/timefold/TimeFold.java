@@ -18,26 +18,17 @@ import org.bukkit.plugin.java.JavaPlugin;
  * @author Silverstar
  */
 public class TimeFold extends JavaPlugin {
-	public static TimeFold instance;
 	public static final Logger log = Logger.getLogger("Minecraft");
 	public static Timer timer;
-	private static int timertime = 60000;
-	@SuppressWarnings("unused")
-	private TimeFoldFileHandler FH;
-	private static String debug = "off";
-    //private final TimeFoldPlayerListener playerListener = new TimeFoldPlayerListener(this);
-    //private final TimeFoldBlockListener blockListener = new TimeFoldBlockListener(this);
-    //private final HashMap<Player, ArrayList<Block>> tfUsers = new HashMap<Player, ArrayList<Block>>();
-	private final TimeFoldActionListener TimeFoldAction = new TimeFoldActionListener(this);
-	//private final TimeFoldFileHandler TimeFoldFile = new TimeFoldFileHandler(this);
 	
     public void onEnable() {
         //PluginManager pm = getServer().getPluginManager();
         //pm.registerEvent(Event.Type.BLOCK_BREAK, blockListener, Event.Priority.Normal, this);
         //pm.registerEvent(Event.Type.PLAYER_MOVE, playerListener, Event.Priority.Normal, this);
-    	//FileHandler("test");
-    	instance = this;
-    	FH = new TimeFoldFileHandler(this);
+    	int timertime = 5000;
+    	@SuppressWarnings("unused")
+		TimeFoldFileHandler FileHandler = new TimeFoldFileHandler(this);
+    	TimeFoldActionListener TimeFoldAction = new TimeFoldActionListener(this);
     	
     	timer = new Timer(timertime, TimeFoldAction);
     	timer.start();
@@ -56,29 +47,13 @@ public class TimeFold extends JavaPlugin {
     	if(cmdLabel.equalsIgnoreCase("TimeFold")){
     		if(args.length == 0){
     			sender.sendMessage(ChatColor.YELLOW + "/timefold get " + ChatColor.WHITE +"- shows the current time");
-    			sender.sendMessage(ChatColor.YELLOW + "/timefold debug " + ChatColor.GRAY + "<on/off> " + ChatColor.WHITE +"- shows if debug is on/off " + ChatColor.GRAY + "<sets debug on/off>");
+    			
     		}else if(args.length == 1){
         		if(args[0].equalsIgnoreCase("get")) {
             		String sendertoplayer[] = sender.toString().split("=");
                 	String player[] = sendertoplayer[1].split("}");
             		Long time = getTime(Bukkit.getServer().getPlayer(player[0]));
             		sender.sendMessage(time.toString());
-            	}else if(args[0].equalsIgnoreCase("debug")){
-            		sender.sendMessage("Debug is " + debug);
-            	}
-    		}else if(args.length == 2){
-        		if(args[0].equalsIgnoreCase("debug") && args[1].equalsIgnoreCase("on")){
-        			timer.stop();
-        			TimeFold.timer = new Timer(10000, TimeFoldAction);
-        			timer.start();
-        			debug = "on";
-            		sender.sendMessage("Debug is " + debug);
-        		}else if(args[0].equalsIgnoreCase("debug") && args[1].equalsIgnoreCase("off")){
-        			timer.stop();
-        			TimeFold.timer = new Timer(timertime, TimeFoldAction);
-        			timer.start();
-        			debug = "off";
-            		sender.sendMessage("Debug is " + debug);
         		}
     		}
     		return true;
