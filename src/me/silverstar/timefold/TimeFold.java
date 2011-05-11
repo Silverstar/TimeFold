@@ -1,5 +1,6 @@
 package me.silverstar.timefold;
 
+import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.swing.Timer;
@@ -46,8 +47,7 @@ public class TimeFold extends JavaPlugin {
     public boolean onCommand(CommandSender sender, Command cmd, String cmdLabel, String args[]){
     	if(cmdLabel.equalsIgnoreCase("TimeFold")){
     		if(args.length == 0){
-    			sender.sendMessage(ChatColor.YELLOW + "/timefold get " + ChatColor.WHITE +"- shows the current time");
-    			
+    			sender.sendMessage(getCycle(sender));    			
     		}else if(args.length == 1){
         		if(args[0].equalsIgnoreCase("get")) {
             		String sendertoplayer[] = sender.toString().split("=");
@@ -60,12 +60,33 @@ public class TimeFold extends JavaPlugin {
     	}
     	return false;
     }
+    
     String senderToPlayer(CommandSender sender){
 		int start = sender.toString().indexOf("=") + 1;
 		int end = sender.toString().lastIndexOf("}");
 		return sender.toString().substring(start, end);
     }
+    
     long getTime(Player player) {
     	return player.getWorld().getTime();
+    }
+    
+    String getCycle(CommandSender sender){
+    	int i = 0;
+    	String world = Bukkit.getServer().getPlayer(senderToPlayer(sender)).getWorld().getName();
+    	for(Map.Entry<String, String> entry : TimeFoldFileHandler.worlds.entrySet()){
+    		if(entry.getValue() == world){
+    			i = Integer.valueOf(entry.getKey());
+    			break;
+    		}
+    	}
+    	
+    	if(TimeFoldActionListener.dayscomplete.get(i)){
+    		StringBuilder message = new StringBuilder().append(ChatColor.WHITE).append("It's night ").append(ChatColor.YELLOW).append(TimeFoldActionListener.nights.get(i)).append(ChatColor.WHITE).append(" of ").append(ChatColor.YELLOW).append(TimeFoldFileHandler.worlds.get(i+"2"));
+    		return message.toString();
+    	}else{
+    		StringBuilder message = new StringBuilder().append(ChatColor.WHITE).append("It's day ").append(ChatColor.YELLOW).append(TimeFoldActionListener.days.get(i)).append(ChatColor.WHITE).append(" of ").append(ChatColor.YELLOW).append(TimeFoldFileHandler.worlds.get(i+"1"));
+    		return message.toString();    		
+    	}
     }
 }

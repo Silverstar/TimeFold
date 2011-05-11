@@ -64,10 +64,9 @@ public class TimeFoldFileHandler {
 				i++;
 			}
 		}catch (FileNotFoundException e){
-			TimeFold.log.info("#TimeFold: Error: Can't read the TimeFold settings file");
+			TimeFold.log.info("#TimeFold: Error: Can't find the TimeFold settings file");
 		}catch (Exception e){
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			TimeFold.log.info("#TimeFold: Error while reading the TimeFold settings file");
 		}
 	}
 }
