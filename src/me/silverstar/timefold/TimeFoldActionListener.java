@@ -11,14 +11,12 @@ import org.bukkit.Bukkit;
  * @author Silverstar
  */
 public class TimeFoldActionListener implements ActionListener {
-	public static TimeFold plugin;
 	public static Map<Integer,Integer> days = new HashMap<Integer,Integer>();
 	public static Map<Integer,Integer> nights = new HashMap<Integer,Integer>();
 	public static Map<Integer,Boolean> dayscomplete = new HashMap<Integer,Boolean>();
 	public static Map<Integer,Boolean> nightscomplete = new HashMap<Integer,Boolean>();
 
     public TimeFoldActionListener(TimeFold instance){
-    	plugin = instance;
     	int i = 0;
     	int worlddays;
     	int worldnights;

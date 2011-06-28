@@ -17,15 +17,13 @@ import org.bukkit.Bukkit;
 
 
 /**
- * TimeFold action listener
+ * TimeFold file handler
  * @author Silverstar
  */
 public class TimeFoldFileHandler {
-	public static TimeFold plugin;
 	public static Map<String,String> worlds = new HashMap<String,String>();
 	
 	public TimeFoldFileHandler(TimeFold instance){
-		plugin = instance;
 		int Error = 0;
 
 		if(!new File("plugins" + File.separator + "TimeFold").exists()){
