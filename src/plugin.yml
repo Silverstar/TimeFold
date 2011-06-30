@@ -1,6 +1,6 @@
 name: TimeFold
 description: A time modifying plugin
-version: 0.4b
+version: 0.4.dev
 author: Silverstar
 main: me.silverstar.timefold.TimeFold
 commands:

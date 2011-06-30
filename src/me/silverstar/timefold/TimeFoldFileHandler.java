@@ -22,7 +22,7 @@ import org.bukkit.Bukkit;
  */
 public class TimeFoldFileHandler {
 	public static Map<String,String> worlds = new HashMap<String,String>();
-	
+
 	public TimeFoldFileHandler(TimeFold instance){
 		int Error = 0;
 
@@ -73,10 +73,10 @@ public class TimeFoldFileHandler {
 						k++;
 					}
 					if(Integer.valueOf(worlds.get(String.valueOf(i)+"1")) == 0 && Integer.valueOf(worlds.get(String.valueOf(i)+"2")) == 0){
-		        		TimeFold.log.warning("#TimeFold: Misconfiguration for world \"" + line[0] + "\" found");
-		        		TimeFold.log.warning("#TimeFold: Setting days:nights to 1:1 for " + line[0]);
-		        		worlds.put((String.valueOf(i)+"1"), "1");
-		        		worlds.put((String.valueOf(i)+"2"), "1");
+						TimeFold.log.warning("#TimeFold: Misconfiguration for world \"" + line[0] + "\" found");
+						TimeFold.log.warning("#TimeFold: Setting days:nights to 1:1 for " + line[0]);
+						worlds.put((String.valueOf(i)+"1"), "1");
+						worlds.put((String.valueOf(i)+"2"), "1");
 					}
 					i++;
 				}
