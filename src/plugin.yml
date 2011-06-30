@@ -7,3 +7,6 @@ commands:
     timefold:
         description: Shows the current day/night in the cycle
         usage: /timefold
+    timefold report:
+        description: Creates a report file in the timefold directory
+        usage: /timefold report

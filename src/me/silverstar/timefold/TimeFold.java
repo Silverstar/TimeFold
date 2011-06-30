@@ -56,6 +56,9 @@ public class TimeFold extends JavaPlugin {
 				if(args.length == 0){
 					sender.sendMessage(getCycle(((Player) sender).getWorld().getName()));
 				}else if(args.length == 1){
+					if(args[0].equalsIgnoreCase("report")){
+						TimeFoldFileHandler.createReport();
+					}
 					if(args[0].equalsIgnoreCase("get")){
 						sender.sendMessage(String.valueOf(((Player) sender).getWorld().getTime()));
 					}else if(args[0].equalsIgnoreCase("debug")){
@@ -67,6 +70,8 @@ public class TimeFold extends JavaPlugin {
 							sender.sendMessage("Debug on");
 						}
 					}
+				}else if(args.length == 2){
+					
 				}
 				return true;
 			}else{
