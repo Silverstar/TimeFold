@@ -96,6 +96,6 @@ public class TimeFoldActionListener implements ActionListener {
 	}
 
 	void actiondebug(String when, int worlddays, int worldnights, String worldname, int t, boolean daycomplete, boolean nightcomplete, int day, int night){
-		Bukkit.getServer().broadcastMessage(when + Integer.valueOf(worlddays).toString() + Integer.valueOf(worldnights) + worldname + Integer.valueOf(t) + String.valueOf(daycomplete) + String.valueOf(nightcomplete) + Integer.valueOf(day) + Integer.valueOf(night));
+		TimeFold.debugreceiver.sendMessage(when + Integer.valueOf(worlddays).toString() + Integer.valueOf(worldnights) + worldname + Integer.valueOf(t) + String.valueOf(daycomplete) + String.valueOf(nightcomplete) + Integer.valueOf(day) + Integer.valueOf(night));
 	}
 }

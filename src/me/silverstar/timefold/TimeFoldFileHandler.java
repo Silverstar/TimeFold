@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 
 
 /**
@@ -95,26 +96,34 @@ public class TimeFoldFileHandler {
 		return false;
 	}
 
-	public static boolean createReport(){
+	public static boolean createReport(CommandSender sender){
 		String path = "plugins" + File.separator + "TimeFold" + File.separator + "TimeFold_report.txt";
 		if(new File(path).exists()){
 			try {
 				new File(path).delete();
-				new File(path);
-				FileOutputStream stream = new FileOutputStream(path);
-				DataOutputStream out = new DataOutputStream(stream);
-				BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(out));
-				bw.write("Loaded worlds: " + Bukkit.getServer().getWorlds().toString());
-				bw.newLine();
-				bw.write("Configured worlds: " + worlds.toString());
-				bw.newLine();
-				
-				bw.close();
 			} catch (Exception e) {
-				TimeFold.log.severe("#TimeFold: Can't create the TimeFold reports file");
+				TimeFold.log.severe("#TimeFold: Can't delete the TimeFold reports file");
 				return false;
 			}
 		}
+		try {
+			new File(path);
+			FileOutputStream stream = new FileOutputStream(path);
+			DataOutputStream out = new DataOutputStream(stream);
+			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(out));
+			bw.write("Server Version " + Bukkit.getServer().getVersion());
+			bw.newLine();
+			bw.write("TimeFold Version " + Bukkit.getServer().getPluginManager().getPlugin("TimeFold").getDescription().getVersion());
+			bw.newLine();
+			bw.write("Loaded worlds: " + Bukkit.getServer().getWorlds().toString());
+			bw.newLine();
+			bw.write("Configured worlds: " + worlds.toString());
+			bw.close();
+		} catch (Exception e) {
+			TimeFold.log.severe("#TimeFold: Can't create the TimeFold reports file");
+			return false;
+		}
+		sender.sendMessage("Report successfully created in the TimeFold directory!");
 		return true;
 	}
 }

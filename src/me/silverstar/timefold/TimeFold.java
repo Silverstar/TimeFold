@@ -25,6 +25,7 @@ public class TimeFold extends JavaPlugin {
 	public static final Logger log = Logger.getLogger("Minecraft");
 	public static Timer timer;
 	public static boolean debug = false;
+	public static CommandSender debugreceiver;
 
 	public void onEnable() {
 		new TimeFoldFileHandler(this);
@@ -52,48 +53,49 @@ public class TimeFold extends JavaPlugin {
 
 	public boolean onCommand(CommandSender sender, Command cmd, String cmdLabel, String args[]){
 		if(cmdLabel.equalsIgnoreCase("TimeFold")){
-			if(sender instanceof Player){
-				if(args.length == 0){
-					sender.sendMessage(getCycle(((Player) sender).getWorld().getName()));
-				}else if(args.length == 1){
-					if(args[0].equalsIgnoreCase("report")){
-						TimeFoldFileHandler.createReport();
+			if(args.length == 0){
+				if(sender instanceof Player){
+					sender.sendMessage(getCycle(findWorld(((Player) sender).getWorld().getName())));
+				}else{
+					sender.sendMessage("No world specified!");
+					sender.sendMessage("Use \"timefold <worldname>\"");
+				}
+			}else if(args.length == 1){
+				if(args[0].equalsIgnoreCase("report")){
+					TimeFoldFileHandler.createReport(sender);
+				}else if(args[0].equalsIgnoreCase("debug")){
+					if(debug){
+						debug = false;
+						debugreceiver = null;
+						sender.sendMessage("Debug off");
+					}else if(!debug){
+						debug = true;
+						debugreceiver = sender;
+						sender.sendMessage("Debug on");
 					}
-					if(args[0].equalsIgnoreCase("get")){
+				}else if(sender instanceof Player){
+					if(sender.isOp() && args[0].equalsIgnoreCase("getraw")){
 						sender.sendMessage(String.valueOf(((Player) sender).getWorld().getTime()));
-					}else if(args[0].equalsIgnoreCase("debug")){
-						if(debug){
-							debug = false;
-							sender.sendMessage("Debug off");
-						}else if(!debug){
-							debug = true;
-							sender.sendMessage("Debug on");
+					}else if(sender.isOp() && args[0].equalsIgnoreCase("push")){
+						if(findWorld(((Player) sender).getWorld().getName()) != -1){
+							int i = findWorld(((Player) sender).getWorld().getName());
+							if(TimeFoldActionListener.dayscomplete.get(i)){
+								TimeFoldActionListener.nights.put(i, (TimeFoldActionListener.nights.get(i)+1));
+							}else if(TimeFoldActionListener.nightscomplete.get(i)){
+								TimeFoldActionListener.days.put(i, (TimeFoldActionListener.days.get(i)+1));
+							}
 						}
 					}
-				}else if(args.length == 2){
-					
+				}else{
+					sender.sendMessage(getCycle(findWorld(args[0])));
 				}
-				return true;
-			}else{
-				if(args.length == 0){
-					log.warning("#TimeFold: no world specified!");
-					log.info("#TimeFold: use \"timefold <worldname>\"");
-				}else if(args.length == 1){
-					String cycle;
-					cycle = getCycle(args[0]);
-					if(cycle.matches("(?i).*TimeFold.*")){
-						log.warning("#" + cycle);
-					}else{
-						log.info("#TimeFold: " + cycle.replaceAll("§.", ""));
-					}
-				}
-				return true;
 			}
+			return true;
 		}
 		return false;
 	}
 
-	String getCycle(String world){
+	int findWorld(String world){
 		int i = 0;
 		boolean found = false;
 
@@ -106,6 +108,13 @@ public class TimeFold extends JavaPlugin {
 		}
 
 		if(found){
+			return i;
+		}
+		return -1;
+	}
+
+	String getCycle(int i){
+		if(i != -1){
 			int nights = Integer.valueOf(TimeFoldFileHandler.worlds.get(String.valueOf(i)+"2"));
 			int days = Integer.valueOf(TimeFoldFileHandler.worlds.get(String.valueOf(i)+"1"));
 			if(nights == 0){
