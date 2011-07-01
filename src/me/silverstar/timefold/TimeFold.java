@@ -10,10 +10,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
-import org.bukkit.event.player.PlayerListener;
 import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -30,10 +27,10 @@ public class TimeFold extends JavaPlugin {
 	public void onEnable() {
 		new TimeFoldFileHandler(this);
 		ActionListener TimeFoldActionListener = new TimeFoldActionListener(this);
-		PlayerListener TimeFoldBedListener = new TimeFoldBedListener(this);
+		//PlayerListener TimeFoldBedListener = new TimeFoldBedListener(this);
 
-		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvent(Event.Type.PLAYER_BED_ENTER, TimeFoldBedListener, Event.Priority.Monitor, this);
+		//PluginManager pm = getServer().getPluginManager();
+		//pm.registerEvent(Event.Type.PLAYER_BED_ENTER, TimeFoldBedListener, Event.Priority.Monitor, this);
 
 		int timertime = 5000;
 
@@ -76,15 +73,6 @@ public class TimeFold extends JavaPlugin {
 				}else if(sender instanceof Player){
 					if(sender.isOp() && args[0].equalsIgnoreCase("getraw")){
 						sender.sendMessage(String.valueOf(((Player) sender).getWorld().getTime()));
-					}else if(sender.isOp() && args[0].equalsIgnoreCase("push")){
-						if(findWorld(((Player) sender).getWorld().getName()) != -1){
-							int i = findWorld(((Player) sender).getWorld().getName());
-							if(TimeFoldActionListener.dayscomplete.get(i)){
-								TimeFoldActionListener.nights.put(i, (TimeFoldActionListener.nights.get(i)+1));
-							}else if(TimeFoldActionListener.nightscomplete.get(i)){
-								TimeFoldActionListener.days.put(i, (TimeFoldActionListener.days.get(i)+1));
-							}
-						}
 					}
 				}else{
 					sender.sendMessage(getCycle(findWorld(args[0])));

@@ -66,25 +66,23 @@ public class TimeFoldActionListener implements ActionListener {
 				actiondebug("before:", worlddays, worldnights, worldname, t, daycomplete, nightcomplete, day, night);
 			}
 
-			if(Bukkit.getServer().getWorld(worldname).getLoadedChunks().length != 0){
-				if(!daycomplete && t > 11500 && t < 12000){
-					if(worlddays > day || worldnights == 0){
-						Bukkit.getServer().getWorld(worldname).setTime(01);
-						days.put(i, (day+1));
-					}else if(worlddays == day){
-						dayscomplete.put(i, true);
-						nights.put(i, 1);
-						nightscomplete.put(i, false);
-					}
-				}else if(t > 22500 && t < 23000 && !nightcomplete){
-					if(worldnights > night || worlddays == 0){
-						Bukkit.getServer().getWorld(worldname).setTime(13500);
-						nights.put(i, (night+1));
-					}else if(worldnights == night){
-						nightscomplete.put(i, true);
-						days.put(i, 1);
-						dayscomplete.put(i, false);
-					}
+			if(!daycomplete && t > 11500 && t < 12000){
+				if(worlddays > day || worldnights == 0){
+					Bukkit.getServer().getWorld(worldname).setTime(01);
+					days.put(i, (day+1));
+				}else if(worlddays == day){
+					dayscomplete.put(i, true);
+					nights.put(i, 1);
+					nightscomplete.put(i, false);
+				}
+			}else if(t > 22500 && t < 23000 && !nightcomplete){
+				if(worldnights > night || worlddays == 0){
+					Bukkit.getServer().getWorld(worldname).setTime(13500);
+					nights.put(i, (night+1));
+				}else if(worldnights == night){
+					nightscomplete.put(i, true);
+					days.put(i, 1);
+					dayscomplete.put(i, false);
 				}
 			}
 			i++;
