@@ -36,6 +36,7 @@ public class FileHandler {
 				config.setProperty("world0", "world");
 				config.setProperty("world0days", 1);
 				config.setProperty("world0nights", 1);
+				config.setProperty("world0dimEvery", 0);
 				saveConfig();
 				TimeFold.log.info("#TimeFold: Config was empty, wrote default config.");
 			}
