@@ -10,7 +10,9 @@ import org.bukkit.plugin.java.JavaPlugin;
  *
  * @author Silverstar
  */
+
 public class TimeFold extends JavaPlugin {
+	public final TimeFold plugin = this;
 	public static final Logger log = Logger.getLogger("Minecraft");
 //	public static Timer timer;
 //	public static boolean debug = false;
