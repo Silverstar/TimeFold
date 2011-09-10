@@ -1,12 +1,9 @@
 name: TimeFold
 description: A time modifying plugin
-version: 0.5.dev.silver
+version: 0.5.beta1
 author: Silverstar
 main: me.silverstar.timefold.TimeFold
 commands:
     timefold:
         description: Shows the current day/night in the cycle
         usage: /timefold
-#    timefold report:
-#        description: Creates a report file in the timefold directory
-#        usage: /timefold report

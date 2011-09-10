@@ -2,6 +2,12 @@ package me.silverstar.timefold;
 
 import java.util.logging.Logger;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -24,91 +30,63 @@ public class TimeFold extends JavaPlugin {
 
 		log.info("#TimeFold version " + plugin.getDescription().getVersion() + " is enabled!");
 	}
+
 	public void onDisable(){
 		log.info("#TimeFold version " + plugin.getDescription().getVersion() + " is disabled!");
 	}
 
-//	public boolean onCommand(CommandSender sender, Command cmd, String cmdLabel, String args[]){
-//		if(cmdLabel.equalsIgnoreCase("TimeFold")){
-//			if(args.length == 0){
-//				if(sender instanceof Player){
-//					sender.sendMessage(getCycle(findWorld(((Player) sender).getWorld().getName())));
-//				}else{
-//					sender.sendMessage("No world specified!");
-//					sender.sendMessage("Use \"timefold <worldname>\"");
-//				}
-//			}else if(args.length == 1){
-//				if(args[0].equalsIgnoreCase("report")){
-//					FileHandler.createReport(sender);
-//				}else if(args[0].equalsIgnoreCase("debug")){
-//					if(debug){
-//						debug = false;
-//						debugreceiver = null;
-//						sender.sendMessage("Debug off");
-//					}else if(!debug){
-//						debug = true;
-//						debugreceiver = sender;
-//						sender.sendMessage("Debug on");
-//					}
-//				}else if(sender instanceof Player){
-//					if(sender.isOp() && args[0].equalsIgnoreCase("getraw")){
-//						sender.sendMessage(String.valueOf(((Player) sender).getWorld().getTime()));
-//					}else if(sender.isOp() && args[0].equalsIgnoreCase("push")){
-//						if(findWorld(((Player) sender).getWorld().getName()) != -1){
-//							int i = findWorld(((Player) sender).getWorld().getName());
-//							if(TimeFoldActionListener.dayscomplete.get(i)){
-//								TimeFoldActionListener.nights.put(i, (TimeFoldActionListener.nights.get(i)+1));
-//							}else if(TimeFoldActionListener.nightscomplete.get(i)){
-//								TimeFoldActionListener.days.put(i, (TimeFoldActionListener.days.get(i)+1));
-//							}
-//						}
-//					}
-//				}else{
-//					sender.sendMessage(getCycle(findWorld(args[0])));
-//				}
-//			}
-//			return true;
-//		}
-//		return false;
-//	}
-//
-//	int findWorld(String world){
-//		int i = 0;
-//		boolean found = false;
-//
-//		for(Map.Entry<String, String> entry : FileHandler.worlds.entrySet()){
-//			if(entry.getValue().equalsIgnoreCase(world)){
-//				i = Integer.valueOf(entry.getKey());
-//				found = true;
-//				break;
-//			}
-//		}
-//
-//		if(found){
-//			return i;
-//		}
-//		return -1;
-//	}
-//
-//	String getCycle(int i){
-//		if(i != -1){
-//			int nights = Integer.valueOf(FileHandler.worlds.get(String.valueOf(i)+"2"));
-//			int days = Integer.valueOf(FileHandler.worlds.get(String.valueOf(i)+"1"));
-//			if(nights == 0){
-//				return "It's day all the time.";
-//			}else if(days == 0){
-//				return "It's always night.";
-//			}else if(days == 1 && nights == 1){
-//				return "Normal day/night cycle. Look up in the sky!";
-//			}else if(TimeFoldActionListener.dayscomplete.get(i)){
-//				StringBuilder message = new StringBuilder().append(ChatColor.WHITE).append("It's night ").append(ChatColor.YELLOW).append(TimeFoldActionListener.nights.get(i)).append(ChatColor.WHITE).append(" of ").append(ChatColor.YELLOW).append(FileHandler.worlds.get(i+"2"));
-//				return message.toString();
-//			}else{
-//				StringBuilder message = new StringBuilder().append(ChatColor.WHITE).append("It's day ").append(ChatColor.YELLOW).append(TimeFoldActionListener.days.get(i)).append(ChatColor.WHITE).append(" of ").append(ChatColor.YELLOW).append(FileHandler.worlds.get(i+"1"));
-//				return message.toString();
-//			}
-//		}else{
-//			return "TimeFold is not configured for this world.";
-//		}
-//	}
+	public boolean onCommand(CommandSender sender, Command cmd, String cmdLabel, String args[]){
+		if(cmdLabel.equalsIgnoreCase("TimeFold")){
+			switch(args.length){
+			case 0:
+				if(sender instanceof Player){
+					sender.sendMessage(getCycle(((Player) sender).getWorld().getName()));
+				}else if(sender instanceof ConsoleCommandSender){
+					sender.sendMessage("#TimeFold: No world specified!");
+					sender.sendMessage("#TimeFold: Use \"timefold <worldname>\"");
+					break;
+				}
+			case 1:
+				if(sender instanceof Player){
+					return false;
+				}else if(sender instanceof ConsoleCommandSender){
+					sender.sendMessage("#TimeFold: " + getCycle(args[0]));
+					break;
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+
+	String getCycle(String world){
+		if(FileHandler.config.getNode(world) != null){
+			if(Bukkit.getServer().getWorld(world) != null){
+				int days = FileHandler.config.getNode(world).getInt("days", 1);
+				int nights = FileHandler.config.getNode(world).getInt("nights", 1);
+				int elDays = ActionHandler.elDays.get(world);
+				int elNights = ActionHandler.elNights.get(world);
+
+				if(nights == 0){
+					return "It's day all the time.";
+				}else if(days == 0){
+					return "Neverending darkness...";
+				}else if(days == 1 && nights == 1){
+					return "Normal day/night cycle. Look up in the sky!";
+				}else if(ActionHandler.isDay.get(world)){
+					StringBuilder message = new StringBuilder().append(ChatColor.WHITE).append("It's day ").append(ChatColor.YELLOW).append(elDays).append(ChatColor.WHITE).append(" of ").append(ChatColor.YELLOW).append(days);
+					return message.toString();
+				}else if(ActionHandler.isNight.get(world)){
+					StringBuilder message = new StringBuilder().append(ChatColor.WHITE).append("It's night ").append(ChatColor.YELLOW).append(elNights).append(ChatColor.WHITE).append(" of ").append(ChatColor.YELLOW).append(nights);
+					return message.toString();
+				}else{
+					return "Unknown State. Please tell the author.";
+				}
+			}else{
+				return "World does not exist / is not loaded!";
+			}
+		}else{
+			return "No configuration for this world.";
+		}
+	}
 }
