@@ -2,7 +2,6 @@ package me.silverstar.timefold;
 
 import java.util.logging.Logger;
 
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -14,32 +13,19 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class TimeFold extends JavaPlugin {
 	public final TimeFold plugin = this;
 	public static final Logger log = Logger.getLogger("Minecraft");
-//	public static Timer timer;
-//	public static boolean debug = false;
-//	public static CommandSender debugreceiver;
 
 	public void onEnable() {
 		new FileHandler(this);
-//		ActionListener TimeFoldActionListener = new TimeFoldActionListener(this);
+		new ActionHandler(this);
 //		PlayerListener TimeFoldBedListener = new TimeFoldBedListener(this);
 //
 //		PluginManager pm = getServer().getPluginManager();
 //		pm.registerEvent(Event.Type.PLAYER_BED_ENTER, TimeFoldBedListener, Event.Priority.Monitor, this);
-//
-//		int timertime = 5000;
-//
-//		timer = new Timer(timertime, TimeFoldActionListener);
-//		timer.setInitialDelay(10000);
-//		timer.start();
 
-		PluginDescriptionFile pdfFile = this.getDescription();
-		log.info("#TimeFold version " + pdfFile.getVersion() + " is enabled!");
+		log.info("#TimeFold version " + plugin.getDescription().getVersion() + " is enabled!");
 	}
 	public void onDisable(){
-//		timer.stop();
-
-		PluginDescriptionFile pdfFile = this.getDescription();
-		log.info("#TimeFold version " + pdfFile.getVersion() + " is disabled!");
+		log.info("#TimeFold version " + plugin.getDescription().getVersion() + " is disabled!");
 	}
 
 //	public boolean onCommand(CommandSender sender, Command cmd, String cmdLabel, String args[]){
