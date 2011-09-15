@@ -44,22 +44,26 @@ public class TimeFold extends JavaPlugin {
 				}else if(sender instanceof ConsoleCommandSender){
 					sender.sendMessage("#TimeFold: No world specified!");
 					sender.sendMessage("#TimeFold: Use \"timefold <worldname>\"");
-					break;
 				}
+				break;
 			case 1:
-				if(sender instanceof Player){
-					return false;
+				if(args[0].equalsIgnoreCase("report")){
+					FileHandler.createReport(sender);
+				}else if(sender instanceof Player){
+					
 				}else if(sender instanceof ConsoleCommandSender){
 					sender.sendMessage("#TimeFold: " + getCycle(args[0]));
-					break;
 				}
+				break;
+			default:
+				return false;
 			}
 			return true;
 		}
 		return false;
 	}
 
-	String getCycle(String world){
+	private static String getCycle(String world){
 		if(FileHandler.config.getNode(world) != null){
 			if(Bukkit.getServer().getWorld(world) != null){
 				int days = FileHandler.config.getNode(world).getInt("days", 1);
@@ -80,7 +84,7 @@ public class TimeFold extends JavaPlugin {
 					StringBuilder message = new StringBuilder().append(ChatColor.WHITE).append("It's night ").append(ChatColor.YELLOW).append(elNights).append(ChatColor.WHITE).append(" of ").append(ChatColor.YELLOW).append(nights);
 					return message.toString();
 				}else{
-					return "Unknown State. Please tell the author.";
+					return "Error: Unknown State. Please tell the author.";
 				}
 			}else{
 				return "World does not exist / is not loaded!";

@@ -55,7 +55,7 @@ public class ActionHandler {
 			elNights.put(entry, 1);
 		}
 
-		plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, new Runnable() {
+		plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
 			public void run() {
 				action();
 			}
